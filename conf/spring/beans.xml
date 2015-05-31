@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/util 
+                           http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!-- Local stats/counters -->
+	<bean id="TSC_LOCAL" class="com.github.ddth.tsc.mem.InmemCounterFactory"
+		init-method="init" destroy-method="destroy" lazy-init="false">
+	</bean>
+	<!-- Global stats: un-comment bean TSC_GLOBAL to enable global stats/counters 
+		(e.g. in case there are more than 1 running bloom-server for load balancing) -->
+	<!-- <bean id="TSC_GLOBAL" class="com.github.ddth.tsc.redis.RedisCounterFactory" 
+		init-method="init" destroy-method="destroy" lazy-init="false"> <property 
+		name="host" value="localhost" /> <property name="port" value="6379" /> <property 
+		name="redisPoolConfig"> <bean class="com.github.ddth.redis.PoolConfig"> <property 
+		name="maxActive" value="2" /> <property name="minIdle" value="1" /> </bean> 
+		</property> </bean> -->
+
+	<bean id="BLOOM_API" class="api.BloomApi" lazy-init="false"
+		init-method="init" destroy-method="destroy" scope="singleton">
+		<property name="storageBasePath" value="data" />
+	</bean>
+
+	<!-- beans for development env -->
+	<beans>
+	</beans>
+
+	<!-- beans for production env -->
+	<beans profile="prod,production">
+	</beans>
+</beans>

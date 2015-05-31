@@ -1,0 +1,14 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+GET         /                                   controllers.Application.index()
+GET         /put/:item                          controllers.Application.put(item: String, bloomName="default")
+GET         /put/:item/:bloomName               controllers.Application.put(item: String, bloomName: String)
+GET         /mightContain/:item                 controllers.Application.mightContain(item: String, bloomName="default")
+GET         /mightContain/:item/:bloomName      controllers.Application.mightContain(item: String, bloomName: String)
+
+POST        /initBloom                          controllers.Application.initBloom()
+
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                       controllers.Assets.at(path="/public", file)
