@@ -32,6 +32,7 @@ public class Application extends BaseController {
         result.put(Constants.RESPONSE_FIELD_MESSAGE, message);
         response().setHeader(CONTENT_TYPE, "application/json");
         response().setHeader(CONTENT_ENCODING, "utf-8");
+        Registry.updateCounters(status);
         return ok(SerializationUtils.toJsonString(result));
     }
 
@@ -182,8 +183,8 @@ public class Application extends BaseController {
         ICounterFactory globalCounterFactory = Registry.getGlobalCounterFactory();
 
         long timestamp = System.currentTimeMillis();
-        String[] tscNames = new String[] { Registry.TSC_TOTAL, Registry.TSC_SUCCESSFUL,
-                Registry.TSC_FAILED_ENGINE, Registry.TSC_FAILED_NAMESPACE };
+        String[] tscNames = new String[] { Registry.TSC_TOTAL, Registry.TSC_200, Registry.TSC_400,
+                Registry.TSC_403, Registry.TSC_404, Registry.TSC_500 };
         for (String name : tscNames) {
             statsLocal.put(
                     name,
@@ -197,8 +198,9 @@ public class Application extends BaseController {
                                     : null, timestamp));
         }
 
-        String[] counterNames = new String[] { Registry.COUNTER_TOTAL, Registry.COUNTER_SUCCESSFUL,
-                Registry.COUNTER_FAILED_ENGINE, Registry.COUNTER_FAILED_NAMESPACE };
+        String[] counterNames = new String[] { Registry.COUNTER_TOTAL, Registry.COUNTER_200,
+                Registry.COUNTER_400, Registry.COUNTER_403, Registry.COUNTER_404,
+                Registry.COUNTER_500 };
         for (String name : counterNames) {
             ICounter counter = localCounterFactory != null ? localCounterFactory.getCounter(name)
                     : null;

@@ -135,6 +135,7 @@ public class TBloomServiceImpl implements TBloomService.Iface {
 
     private static TBloomResponse doResponse(int status, boolean value, String message) {
         TBloomResponse response = new TBloomResponse(status, value, message);
+        Registry.updateCounters(status);
         return response;
     }
 }

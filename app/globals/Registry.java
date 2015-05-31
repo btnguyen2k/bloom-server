@@ -35,14 +35,18 @@ public class Registry {
     /*----------------------------------------------------------------------*/
     private static ICounterFactory localCounterFactory, globalCounterFactory;
     public final static String TSC_TOTAL = "BLOOMSERVER_TSC_TOTAL";
-    public final static String TSC_SUCCESSFUL = "BLOOMSERVER_TSC_SUCCESSFUL";
-    public final static String TSC_FAILED_NAMESPACE = "BLOOMSERVER_TSC_FAILED_NAMESPACE";
-    public final static String TSC_FAILED_ENGINE = "BLOOMSERVER_TSC_FAILED_ENGINE";
+    public final static String TSC_200 = "BLOOMSERVER_TSC_200";
+    public final static String TSC_400 = "BLOOMSERVER_TSC_400";
+    public final static String TSC_403 = "BLOOMSERVER_TSC_403";
+    public final static String TSC_404 = "BLOOMSERVER_TSC_404";
+    public final static String TSC_500 = "BLOOMSERVER_TSC_500";
 
     public final static String COUNTER_TOTAL = "BLOOMSERVER_COUNTER_TOTAL";
-    public final static String COUNTER_SUCCESSFUL = "BLOOMSERVER_COUNTER_SUCCESSFUL";
-    public final static String COUNTER_FAILED_NAMESPACE = "BLOOMSERVER_COUNTER_FAILED_NAMESPACE";
-    public final static String COUNTER_FAILED_ENGINE = "BLOOMSERVER_COUNTER_FAILED_ENGINE";
+    public final static String COUNTER_200 = "BLOOMSERVER_COUNTER_200";
+    public final static String COUNTER_400 = "BLOOMSERVER_COUNTER_400";
+    public final static String COUNTER_403 = "BLOOMSERVER_COUNTER_403";
+    public final static String COUNTER_404 = "BLOOMSERVER_COUNTER_404";
+    public final static String COUNTER_500 = "BLOOMSERVER_COUNTER_500";
 
     public final static String COUNTER_CONCURENCY = "BLOOMSERVER_CONCURENCY";
 
@@ -128,17 +132,26 @@ public class Registry {
         _updateTscCounters(TSC_TOTAL);
         _updateCounters(COUNTER_TOTAL);
         switch (status) {
-        case -1:
-            _updateTscCounters(TSC_FAILED_NAMESPACE);
-            _updateCounters(COUNTER_FAILED_NAMESPACE);
+        case 200:
+            _updateTscCounters(TSC_200);
+            _updateCounters(COUNTER_200);
             break;
-        case 0:
-            _updateTscCounters(TSC_FAILED_ENGINE);
-            _updateCounters(COUNTER_FAILED_ENGINE);
+        case 400:
+            _updateTscCounters(TSC_400);
+            _updateCounters(COUNTER_400);
             break;
-        default:
-            _updateTscCounters(TSC_SUCCESSFUL);
-            _updateCounters(COUNTER_SUCCESSFUL);
+        case 403:
+            _updateTscCounters(TSC_403);
+            _updateCounters(COUNTER_403);
+            break;
+        case 404:
+            _updateTscCounters(TSC_404);
+            _updateCounters(COUNTER_404);
+            break;
+        case 500:
+            _updateTscCounters(TSC_500);
+            _updateCounters(COUNTER_500);
+            break;
         }
     }
 
