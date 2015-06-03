@@ -220,4 +220,5 @@ public class Application extends BaseController {
                 statsGlobal);
         return ok(html);
     }
+
 }

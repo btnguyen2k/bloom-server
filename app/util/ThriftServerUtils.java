@@ -28,10 +28,10 @@ public class ThriftServerUtils {
     public final static int DEFAULT_CLIENT_TIMEOUT_MS = 10000;
     public final static int DEFAULT_MAX_FRAMESIZE = 1024 * 1024;
     public final static int DEFAULT_TOTAL_MAX_READ_BUFFERSIZE = 16 * 1024 * 1024;
-    public final static int DEFAULT_NUM_SELECTOR_THREADS = 4;
+    public final static int DEFAULT_NUM_SELECTOR_THREADS = 2;
     public final static int DEFAULT_NUM_WORKER_THREADS;
     static {
-        DEFAULT_NUM_WORKER_THREADS = Math.max(2, Runtime.getRuntime().availableProcessors());
+        DEFAULT_NUM_WORKER_THREADS = Math.max(4, Runtime.getRuntime().availableProcessors());
     }
 
     /**
@@ -58,7 +58,7 @@ public class ThriftServerUtils {
      *            max number of worker threads, supply {@code <=0} value to let
      *            the method choose a default {@code maxWorkerThreads} value
      *            (which is
-     *            {@code Math.max(2, Runtime.getRuntime().availableProcessors())}
+     *            {@code Math.max(4, Runtime.getRuntime().availableProcessors())}
      *            )
      * @return
      * @throws TTransportException
@@ -160,7 +160,7 @@ public class ThriftServerUtils {
      *            number of worker threads, supply {@code <=0} value to let the
      *            method choose a default {@code numWorkerThreads} value (which
      *            is
-     *            {@code Math.max(2, Runtime.getRuntime().availableProcessors())}
+     *            {@code Math.max(4, Runtime.getRuntime().availableProcessors())}
      *            )
      * @return
      * @throws TTransportException
@@ -224,7 +224,7 @@ public class ThriftServerUtils {
      *            number of worker threads, supply {@code <=0} value to let the
      *            method choose a default {@code numWorkerThreads} value (which
      *            is
-     *            {@code Math.max(2, Runtime.getRuntime().availableProcessors())}
+     *            {@code Math.max(4, Runtime.getRuntime().availableProcessors())}
      *            )
      * @return
      * @throws TTransportException

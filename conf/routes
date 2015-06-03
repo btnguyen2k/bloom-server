@@ -7,8 +7,9 @@ GET         /put/:item                          controllers.Application.put(item
 GET         /put/:item/:bloomName               controllers.Application.put(item: String, bloomName: String)
 GET         /mightContain/:item                 controllers.Application.mightContain(item: String, bloomName="default")
 GET         /mightContain/:item/:bloomName      controllers.Application.mightContain(item: String, bloomName: String)
-
 POST        /initBloom                          controllers.Application.initBloom()
+
+POST        /thrift                             controllers.ThriftController.doPost()
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                       controllers.Assets.at(path="/public", file)

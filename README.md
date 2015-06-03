@@ -52,10 +52,17 @@ See [RELEASE-NOTES.md](RELEASE-NOTES.md).
   - Output: JSON `{"s":200,"v":true,"m":"Successful: new bloom filter has been created and initialized"}`
   - Output: JSON `{"s":200,"v":false,"m":"Successful: the bloom filter has already existed"}`
 
-
 ### Thrift APIs ###
 
 See file [bloomserver.thrift](thrift/bloomserver.thrift).
+
+### Thrift-over-HTTP APIs ###
+
+Thrift APIs, but over HTTP(s)! URL: `http://server:host/thrift`
+
+### Clients ###
+
+- Java: [https://github.com/btnguyen2k/bloom-jclient](https://github.com/btnguyen2k/bloom-jclient).
 
 
 ## Installation ##
@@ -82,11 +89,11 @@ Note: Java 7+ is required!
 Start server with default options:
 > `/usr/local/bloom-server/conf/server-production.sh start`
 
-Start server with 1024M memory limit, REST API in port 18080, Thrift API on port 19090
+Start server with 1024M memory limit, REST & Thrift-over-HTTP APIs on port 18080, Thrift APIs on port 19090
 > `/usr/local/bloom-server/conf/server-production.sh start -m 1024 -p 18080 -t 19090`
 Set thrift port to 0 (`-t 0`) to disable Thrift APIs.
 
-Default port for REST requests is `8080` and `9090` is the default port for Thrift requests (both port numbers are configurable).
+Default port for REST & Thrift-over-HTTP requests is `8080` and `9090` is the default port for Thrift requests (both port numbers are configurable).
 
 Stop server:
 > `/usr/local/bloom-server/conf/server-production.sh stop`
