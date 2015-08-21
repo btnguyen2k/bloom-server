@@ -12,7 +12,7 @@ Bloom Server provides REST and Thrift APIs to access centralized [bloom filter](
 
 ## Release-notes ##
 
-Latest release: `0.1.0`.
+Latest release: `0.1.1`.
 
 See [RELEASE-NOTES.md](RELEASE-NOTES.md).
 

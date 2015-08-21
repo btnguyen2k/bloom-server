@@ -20,6 +20,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalListener;
 import com.google.common.cache.RemovalNotification;
+import com.google.common.cache.Weigher;
 
 /**
  * Engine to generate IDs.
@@ -58,6 +59,7 @@ public class BloomApi {
      * @return
      */
     public BloomApi init() {
+        // init storage path
         if (!StringUtils.isBlank(storageBasePath)) {
             if (storageBasePath.startsWith("/")) {
                 storageBaseDir = new File(storageBasePath);
@@ -77,6 +79,27 @@ public class BloomApi {
             }
         }
 
+        // init caches
+        long CACHE_DURATION_SECONDS = 24 * 3600; // 1 day
+
+        cacheSpec = CacheBuilder.newBuilder()
+                .expireAfterAccess(CACHE_DURATION_SECONDS, TimeUnit.SECONDS).build();
+        long MAX_MEM = Runtime.getRuntime().maxMemory();
+        cacheBloom = CacheBuilder.newBuilder().maximumWeight((long) (MAX_MEM * 0.9))
+                .weigher(new Weigher<String, BaseBloomFilter>() {
+                    @Override
+                    public int weigh(String bloomName, BaseBloomFilter bloomFilter) {
+                        return (int) (bloomFilter.size() / 8);
+                    }
+                }).expireAfterAccess(CACHE_DURATION_SECONDS, TimeUnit.SECONDS)
+                .removalListener(new RemovalListener<String, BaseBloomFilter>() {
+                    @Override
+                    public void onRemoval(RemovalNotification<String, BaseBloomFilter> item) {
+                        item.getValue().destroy();
+                    }
+                }).build();
+
+        // init "default" bloom filter
         initBloomFilter("default", false, defaultExpectedNumItems, defaultExpectedFpp);
 
         return this;
@@ -86,7 +109,25 @@ public class BloomApi {
      * Destroy method.
      */
     public void destroy() {
-        // EMPTY
+        if (cacheSpec != null) {
+            try {
+                cacheSpec.invalidateAll();
+            } catch (Exception e) {
+                Logger.warn(e.getMessage(), e);
+            } finally {
+                cacheSpec = null;
+            }
+        }
+
+        if (cacheBloom != null) {
+            try {
+                cacheBloom.invalidateAll();
+            } catch (Exception e) {
+                Logger.warn(e.getMessage(), e);
+            } finally {
+                cacheBloom = null;
+            }
+        }
     }
 
     /*----------------------------------------------------------------------*/
@@ -100,15 +141,8 @@ public class BloomApi {
     }
 
     /*----------------------------------------------------------------------*/
-    private Cache<String, BloomSpec> cacheSpec = CacheBuilder.newBuilder().build();
-    private Cache<String, BaseBloomFilter> cacheBloom = CacheBuilder.newBuilder()
-            .expireAfterAccess(24 * 3600, TimeUnit.SECONDS) // 1 day
-            .removalListener(new RemovalListener<String, BaseBloomFilter>() {
-                @Override
-                public void onRemoval(RemovalNotification<String, BaseBloomFilter> item) {
-                    item.getValue().destroy();
-                }
-            }).build();
+    private Cache<String, BloomSpec> cacheSpec = null;
+    private Cache<String, BaseBloomFilter> cacheBloom = null;
 
     synchronized private boolean initBloomSpec(String bloomName, BloomSpec bloomSpec, boolean force) {
         BloomSpec oldSpec = cacheSpec.getIfPresent(bloomName);
